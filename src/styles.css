@@ -1,0 +1,193 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.login-page, .dashboard-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #e0eafc, #cfdef3);
+}
+
+.card {
+    max-width: 400px;
+    width: 100%;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.card h2 {
+    color: #333333;
+    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: 500;
+}
+
+input {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333333;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    border-color: #007bff;
+}
+
+button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.primary-btn {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+.primary-btn:hover {
+    background-color: #0056b3;
+}
+
+.secondary-btn {
+    background-color: #6c757d;
+    color: #ffffff;
+}
+
+.secondary-btn:hover {
+    background-color: #5a6268;
+}
+
+.success-btn {
+    background-color: #28a745;
+    color: #ffffff;
+}
+
+.success-btn:hover {
+    background-color: #218838;
+}
+
+.disabled-btn {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.error-text {
+    color: #dc3545;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.success-text {
+    color: #28a745;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.message {
+    color: #333333;
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.dashboard-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #e0eafc, #cfdef3);
+}
+
+.card {
+    max-width: 500px;
+    width: 100%;
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+.card h2 {
+    color: #222222;
+    margin-bottom: 30px;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+input[type="file"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0;
+    border: 1px dashed #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #444;
+}
+
+button {
+    padding: 12px 25px;
+    margin: 10px 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.primary-btn {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+.primary-btn:hover {
+    background-color: #0062cc;
+    transform: translateY(-2px);
+}
+
+.secondary-btn {
+    background-color: #6c757d;
+    color: #ffffff;
+}
+
+.secondary-btn:hover {
+    background-color: #5a6268;
+}
+
+.success-btn {
+    background-color: #28a745;
+    color: #ffffff;
+}
+
+.success-btn:hover {
+    background-color: #218838;
+}
+
+.disabled-btn {
+    background-color: #adb5bd;
+    cursor: not-allowed;
+}
