@@ -14,6 +14,8 @@ const Login = ({ onLogin }) => {
             const response = await axios.post('http://localhost:5000/login', { email, password });
             const token = response.data.token;
             const decoded = jwtDecode(token);
+            //decoded.is_admin = undefined;
+            //decoded.faculty_id = undefined;
             const user = { faculty_id: decoded.faculty_id, is_admin: decoded.is_admin };
             onLogin(token, user);
         } catch (err) {

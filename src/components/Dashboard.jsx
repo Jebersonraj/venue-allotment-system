@@ -8,6 +8,7 @@ const Dashboard = ({ token, user, onLogout }) => {
     const [loading, setLoading] = useState(false);
     const [facultyFile, setFacultyFile] = useState(null);
     const [venueFile, setVenueFile] = useState(null);
+    const [lastAttendance, setLastAttendance] = useState(null);
 
     useEffect(() => {
         const fetchAssignment = async () => {
@@ -16,37 +17,40 @@ const Dashboard = ({ token, user, onLogout }) => {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setAssignment(response.data.venue_id);
+                setLastAttendance(response.data.last_attendance);
             } catch (err) {
                 console.error('Error fetching assignment:', err);
+                setMessage('Error fetching assignment');
             }
         };
-        if (token) fetchAssignment();
+
+        if (token) {
+            fetchAssignment();
+        }
     }, [token]);
 
-    const handleAllocate = async () => {
+    const handleRecordAttendance = async () => {
         setLoading(true);
         setMessage('');
         try {
-            await axios.post('http://localhost:5000/allocate', {}, {
+            const response = await axios.post('http://localhost:5000/record-attendance', {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            setMessage('Allocation completed successfully');
-            if (!user.is_admin) {
-                const response = await axios.get('http://localhost:5000/assignment', {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                setAssignment(response.data.venue_id);
-            }
+            setMessage(response.data.message);
+            setLastAttendance(response.data.timestamp);
         } catch (err) {
-            setMessage(err.response?.data.error || 'Error during allocation');
-            if (err.response?.data.error === 'Invalid token') {
-                setTimeout(() => onLogout(), 2000);
-            }
+            setMessage(err.response?.data.error || 'Error recording attendance');
         }
         setLoading(false);
     };
 
     const handleFileUpload = async (endpoint, file) => {
+        if (!file) {
+            setMessage('Please select a file');
+            return;
+        }
+        setLoading(true);
+        setMessage('');
         const formData = new FormData();
         formData.append('file', file);
         try {
@@ -60,9 +64,28 @@ const Dashboard = ({ token, user, onLogout }) => {
         } catch (err) {
             setMessage(err.response?.data.error || 'Error uploading file');
         }
+        setLoading(false);
     };
 
+    // Add Allocate Venue function
+    const handleAllocate = async () => {
+        setLoading(true);
+        setMessage('');
+        try {
+            await axios.post('http://localhost:5000/allocate', {}, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setMessage('Allocation completed successfully');
+        } catch (err) {
+            setMessage(err.response?.data.error || 'Error during allocation');
+        }
+        setLoading(false);
+    };
+
+    // Add Download Allocation function
     const handleDownload = async () => {
+        setLoading(true);
+        setMessage('');
         try {
             const response = await axios.get('http://localhost:5000/download-allocation', {
                 headers: { Authorization: `Bearer ${token}` },
@@ -80,6 +103,7 @@ const Dashboard = ({ token, user, onLogout }) => {
         } catch (err) {
             setMessage('Error downloading allocation list');
         }
+        setLoading(false);
     };
 
     return (
@@ -87,7 +111,30 @@ const Dashboard = ({ token, user, onLogout }) => {
             <div className="card">
                 <h2>Dashboard</h2>
                 <button onClick={onLogout} className="secondary-btn">Logout</button>
-                {user.is_admin ? (
+
+                {!user.is_admin && (
+                    <div style={{ marginTop: '20px' }}>
+                        <button
+                            onClick={handleRecordAttendance}
+                            disabled={loading}
+                            className={loading ? 'disabled-btn' : 'primary-btn'}
+                        >
+                            {loading ? 'Recording...' : 'Record Biometric Attendance'}
+                        </button>
+                        {assignment && (
+                            <p className="message">
+                                Assigned to venue: {assignment}
+                            </p>
+                        )}
+                        {lastAttendance && (
+                            <p className="success-text">
+                                Last attendance: {new Date(lastAttendance).toLocaleString()}
+                            </p>
+                        )}
+                    </div>
+                )}
+
+                {user.is_admin && (
                     <div style={{ marginTop: '20px' }}>
                         <div style={{ marginBottom: '20px' }}>
                             <input
@@ -124,20 +171,19 @@ const Dashboard = ({ token, user, onLogout }) => {
                         >
                             {loading ? 'Allocating...' : 'Allocate Venues'}
                         </button>
-                        <button onClick={handleDownload} className="success-btn">
-                            Download Allocation List
+                        <button
+                            onClick={handleDownload}
+                            disabled={loading}
+                            className={loading ? 'disabled-btn' : 'success-btn'}
+                        >
+                            {loading ? 'Downloading...' : 'Download Allocation List'}
                         </button>
-                        {message && (
-                            <p className={message.includes('Error') ? 'error-text' : 'success-text'}>
-                                {message}
-                            </p>
-                        )}
                     </div>
-                ) : (
-                    <p className="message">
-                        {assignment
-                            ? `You are assigned to venue ${assignment}`
-                            : 'You are not assigned to any venue'}
+                )}
+
+                {message && (
+                    <p className={message.includes('Error') ? 'error-text' : 'success-text'}>
+                        {message}
                     </p>
                 )}
             </div>
