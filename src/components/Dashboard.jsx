@@ -62,7 +62,7 @@ const Dashboard = ({ token, user, onLogout }) => {
             });
             setMessage(response.data);
         } catch (err) {
-            setMessage(err.response?.data.error || 'Error uploading file');
+            setMessage(err.response?.data.error || 'Error in uploading file');
         }
         setLoading(false);
     };
